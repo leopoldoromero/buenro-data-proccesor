@@ -1,18 +1,24 @@
-# Use the official Node.js LTS image as base
+# --- Build Stage ---
+FROM node:18-alpine as builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# --- Runtime Stage ---
 FROM node:18-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
+RUN npm ci --only=production
 
-RUN npm ci --only=production && npm cache clean --force
-
-COPY . .
-
-RUN npm install -g @nestjs/cli && npm run build
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-ENTRYPOINT [ "npm" ]
-
-CMD [ "run", "start:prod" ]
+CMD ["node", "dist/main"]
