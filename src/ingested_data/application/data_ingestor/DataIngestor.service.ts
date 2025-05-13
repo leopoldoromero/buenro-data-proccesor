@@ -8,17 +8,19 @@ import { streamArray } from 'stream-json/streamers/StreamArray';
 
 @Injectable()
 export class DataIngestor {
+  private readonly logger = new Logger(DataIngestor.name);
   constructor(
     @Inject('IngestedDataMongoRepository')
     private readonly repository: IngestedDataRepository,
     private readonly configService: ConfigService,
   ) {}
-  private readonly logger = new Logger(DataIngestor.name);
 
   async execute(): Promise<void> {
     this.logger.log('Running data ingestion cron job...');
     const rawUrls = this.configService.get<string>('DATA_ORIGIN_URLS') || '';
-    const urls = rawUrls.split(';').filter(Boolean);
+    const urls = rawUrls
+      .split(';')
+      .map((url) => url.trim().replace(/^"|"$/g, ''));
     for (const url of urls) {
       try {
         const response = await axios.get(url, {

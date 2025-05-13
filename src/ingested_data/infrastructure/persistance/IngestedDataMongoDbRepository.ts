@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { IngestedDataRepository } from 'src/ingested_data/domain/IngestedDataRepository';
 import {
   IngestedDataDocument,
@@ -14,13 +14,18 @@ import { MongoDbOrderType } from 'src/shared/infrastructure/persistance/mongodb/
 
 @Injectable()
 export class IngestedDataMongoRepository implements IngestedDataRepository {
+  private readonly logger = new Logger(IngestedDataMongoRepository.name);
   constructor(
     @InjectModel(IngestedDataDocumentSchema.modelName)
     private readonly model: Model<IngestedDataDocument>,
   ) {}
 
   async persist(data: IngestedData): Promise<void> {
-    await this.model.create(data.getProps());
+    try {
+      await this.model.create(data.getProps());
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async findAllByCriteria(criteria?: Criteria): Promise<Array<IngestedData>> {
@@ -41,7 +46,11 @@ export class IngestedDataMongoRepository implements IngestedDataRepository {
 
     const docs = data.map((d) => d.getProps());
 
-    await this.model.insertMany(docs);
+    try {
+      await this.model.insertMany(docs);
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   private toDomain(document: IngestedDataDocumentSchema): IngestedData {
