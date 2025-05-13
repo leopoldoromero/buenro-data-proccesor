@@ -6,7 +6,7 @@ import { queryParamsToCriteriaMapper } from 'src/ingested_data/application/mappe
 import { Criteria } from 'src/shared/domain/criteria/Criteria';
 
 @ApiTags('ingested-data')
-@Controller('ingested-data')
+@Controller('/api/v1/ingested-data')
 export class GetIngestedDataController {
   constructor(private readonly dataFinder: IngestedDataFinder) {}
 

@@ -6,7 +6,7 @@ export class GetIngestedDataResponse {
     description: 'The unique identifier of the element',
     example: 123456,
   })
-  id: number;
+  id: string;
   @ApiProperty({
     description: 'The name of the human',
     nullable: true,

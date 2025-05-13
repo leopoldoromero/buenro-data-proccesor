@@ -4,7 +4,9 @@ import { DataIngestor } from 'src/ingested_data/application/data_ingestor/DataIn
 
 @Injectable()
 export class DataIngestionTask {
-  constructor(private readonly dataIngestor: DataIngestor) {}
+  constructor(private readonly dataIngestor: DataIngestor) {
+    this.handleCron();
+  }
 
   @Cron(CronExpression.EVERY_12_HOURS)
   async handleCron() {

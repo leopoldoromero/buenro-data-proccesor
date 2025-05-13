@@ -8,7 +8,7 @@ import { IngestedDataMongoRepository } from './infrastructure/persistance/Ingest
 import { DataIngestionTask } from './infrastructure/tasks/DataIngestionTask';
 import { ConfigModule } from '@nestjs/config';
 import { IngestedDataFinder } from './application/ingested_data_finder/IngestedDataFinder.service';
-import { GetIngestedDataController } from './infrastructure/controllers/get_ingested_data/GetIngestedData.controller';
+import { GetIngestedDataController } from './infrastructure/controllers/v1/get_ingested_data/GetIngestedData.controller';
 import { DataIngestor } from './application/data_ingestor/DataIngestor.service';
 
 @Module({

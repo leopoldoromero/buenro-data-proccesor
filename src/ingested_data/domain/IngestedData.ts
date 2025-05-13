@@ -1,7 +1,7 @@
 import { Guard } from 'src/shared/domain/Guard';
 
 interface IngestedDataProps {
-  id: number;
+  id: string;
   name?: string;
   country?: string;
   city: string;

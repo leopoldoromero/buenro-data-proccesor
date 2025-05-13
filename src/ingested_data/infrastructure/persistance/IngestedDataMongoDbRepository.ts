@@ -31,7 +31,6 @@ export class IngestedDataMongoRepository implements IngestedDataRepository {
       .skip(skip)
       .limit(limit)
       .sort(sortBy);
-    console.log('DB items', dbItems);
     return dbItems?.length
       ? dbItems.map((document) => this.toDomain(document))
       : [];

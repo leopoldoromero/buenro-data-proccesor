@@ -32,7 +32,7 @@ export class DataIngestor {
         for await (const { value } of jsonStream) {
           batch.push(
             new IngestedData({
-              id: value.id,
+              id: typeof value.id === 'number' ? String(value.id) : value.id,
               name: value?.name ?? '',
               city: value?.city ?? value?.address.city,
               country: value?.address?.country ?? '',
