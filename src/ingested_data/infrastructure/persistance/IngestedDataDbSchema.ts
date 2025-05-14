@@ -4,6 +4,9 @@ import { Document } from 'mongoose';
 @Schema()
 export class IngestedDataDocumentSchema {
   static readonly modelName = 'IngestedData';
+  @Prop({ required: true })
+  version: string;
+
   @Prop({ required: true, unique: true })
   id: string;
 

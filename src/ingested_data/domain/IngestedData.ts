@@ -12,6 +12,7 @@ interface IngestedDataProps {
   ingestedAt: Date;
 }
 export class IngestedData {
+  private readonly DEFAULT_VERSION = '1';
   private readonly MIN_PRICE_PERNIGHT = 100;
   private readonly MAX_PRICE_PERNIGHT = 1000;
   private readonly REQUIRED_PARAMS = [
@@ -23,8 +24,13 @@ export class IngestedData {
     'ingestedAt',
   ];
   private readonly AVAILABLE_PRICE_SEGMENTS = ['high', 'medium', 'low'];
-  constructor(private readonly props: IngestedDataProps) {
+  readonly version: string;
+  constructor(
+    private readonly props: IngestedDataProps,
+    version?: string,
+  ) {
     this.validate(props);
+    this.version = version ?? this.DEFAULT_VERSION;
   }
 
   private validate(props: IngestedDataProps) {
@@ -52,8 +58,8 @@ export class IngestedData {
     }
   }
 
-  public getProps(): IngestedDataProps {
-    return this.props;
+  public getProps(): IngestedDataProps & { version: string } {
+    return { ...this.props, version: this.version };
   }
 
   public getProp<T extends keyof IngestedDataProps>(

@@ -11,9 +11,7 @@ export class DataIngestor {
     private readonly repository: IngestedDataRepository,
     @Inject('DATA_SOURCE_PROVIDERS')
     private readonly providers: DataSourceProvider[],
-  ) {
-    this.execute();
-  }
+  ) {}
 
   async execute(): Promise<void> {
     this.logger.log('Running data ingestion cron job...');

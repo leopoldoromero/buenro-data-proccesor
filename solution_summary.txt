@@ -1,0 +1,13 @@
+Solution Explanation:
+
+I designed a normalized data model where fields that originally had different names but referred to the same concept are unified under a single, consistent name within the system. These fields are mapped during data ingestion to ensure that, from the domain’s perspective, there is only one model, and the rest of the system depends solely on it. This approach decouples domain logic from infrastructure details such as input formats and database schemas.
+
+To ensure the model can be extended in the future, I encapsulated the data retrieval logic by implementing specific providers for each data source. Each provider defines its own input DTOs and returns domain objects. This design enables the system to handle data ingestion from multiple sources or formats without requiring changes across the entire codebase.
+
+In scenarios where the source data format changes significantly or new fields need to be supported, these can be incorporated into the domain model. To support such evolution, a version field is included in the domain object, allowing the system to manage different versions of the model over time.
+
+The querying system is also flexible and scalable. It has a well-defined structure that supports filtering by any field, sorting, and pagination. All of this is made possible by a Criteria class that separates the query logic from the database syntax. This means it is easy to extend or change the underlying storage engine in the future without affecting how the system builds or understands queries.
+
+Improvements:
+
+To better handle large datasets or improve scalability and reliability of the ingestion process, a good next step would be to integrate a queue-based system such as RabbitMQ. This would allow ingestion tasks to be processed asynchronously and distributed across multiple workers, avoiding performance bottlenecks and making the system more resilient under high data loads.
