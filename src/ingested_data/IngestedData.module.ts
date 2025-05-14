@@ -10,6 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { IngestedDataFinder } from './application/ingested_data_finder/IngestedDataFinder.service';
 import { GetIngestedDataController } from './infrastructure/controllers/v1/get_ingested_data/GetIngestedData.controller';
 import { DataIngestor } from './application/data_ingestor/DataIngestor.service';
+import { DataSourceHttpProviderStructured } from './infrastructure/http/DataSourceHttpProviderStructured';
+import { DataSourceHttpProviderLarge } from './infrastructure/http/DataSourceHttpProviderLarge';
+import { DataSourceProvider } from './domain/DataSourceProvider';
 
 @Module({
   imports: [
@@ -25,6 +28,18 @@ import { DataIngestor } from './application/data_ingestor/DataIngestor.service';
     {
       provide: 'IngestedDataMongoRepository',
       useClass: IngestedDataMongoRepository,
+    },
+    DataSourceHttpProviderStructured,
+    DataSourceHttpProviderLarge,
+    {
+      provide: 'DATA_SOURCE_PROVIDERS',
+      useFactory: (
+        providerA: DataSourceHttpProviderStructured,
+        providerB: DataSourceHttpProviderLarge,
+      ): DataSourceProvider[] => {
+        return [providerA, providerB];
+      },
+      inject: [DataSourceHttpProviderStructured, DataSourceHttpProviderLarge],
     },
     IngestedDataDocumentSchema,
     IngestedDataMongoRepository,
